@@ -10,7 +10,11 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
-app.use(cors());
+const corsOptions = {
+  origin:"http://localhost:3000",
+  credentials:true,
+} 
+app.use(cors(corsOptions));
 
 // In-memory user storage (for simplicity)
 let users = [
@@ -25,48 +29,59 @@ let users = [
 const secretKey = 'your-secret-key';
 
 // Register endpoint (for admin to create new users)
-app.post('/api/register', (req, res) => {
-  const { email, password, isAdmin } = req.body;
-
-  // Check if the requester is an admin
-  const token = req.headers['authorization'];
-  if (!token) return res.status(401).send({ message: 'No token provided' });
-
-  jwt.verify(token, secretKey, (err, decoded) => {
-    if (err || !decoded.isAdmin) {
-      return res.status(401).send({ message: 'Unauthorized' });
-    }
-
+app.post('/api/users/create', (req, res) => {
+  try{
+    const { email, password, isAdmin } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8);
     const newUser = { id: users.length + 1, email, password: hashedPassword, isAdmin };
     users.push(newUser);
     res.status(201).send({ message: 'User created successfully', user: newUser });
-  });
+  }catch(error){
+    res.status(500).send("internal error")
+  }
+  
 });
 
 // Login endpoint
-app.post('/api/login', (req, res) => {
+app.post('/api/auth/login', (req, res) => {
   const { email, password } = req.body;
   const user = users.find(u => u.email === email);
   if (user && bcrypt.compareSync(password, user.password)) {
-    const token = jwt.sign({ id: user.id, email: user.email, isAdmin: user.isAdmin }, secretKey, { expiresIn: '1h' });
-    res.send({ token });
+    res.send({message:"success"});
   } else {
     res.status(401).send({ message: 'Invalid email or password' });
   }
 });
+app.post('/api/auth/logout',(req,res)=>{
+  res.status(200).send('Logged out successfully');
+})
 
-// Profile endpoint (protected)
-app.get('/api/profile', (req, res) => {
-  const token = req.headers['authorization'];
-  if (!token) return res.status(401).send({ message: 'No token provided' });
+const filterSensitiveFields = (user) => {
+  const { password, ...userWithoutPassword } = user;
+  return userWithoutPassword;
+};
 
-  jwt.verify(token, secretKey, (err, decoded) => {
-    if (err) return res.status(401).send({ message: 'Failed to authenticate token' });
-    res.send({ email: decoded.email, isAdmin: decoded.isAdmin });
-  });
+app.get('/api/users',(req,res)=>{
+  const usersWithoutPasswords = users.map(user => filterSensitiveFields(user));
+  res.json(usersWithoutPasswords);
+})
+// Delete user endpoint
+app.delete('/api/users/:id', (req, res) => {
+  
+  const { id } = req.params;
+  console.log(id)
+    try{
+      const userIndex = users.findIndex(user => user.id === parseInt(id));
+      if (userIndex !== -1) {
+        users.splice(userIndex, 1);
+        res.status(200).send({ message: 'User deleted successfully' });
+      } else {
+        res.status(404).send({ message: 'User not found' });
+      }
+    }catch(error){
+      res.status(500).send("internal error")
+    }
 });
-
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
