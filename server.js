@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
 const corsOptions = {
-  origin:"http://localhost:3000",
+  origin:"*",
   credentials:true,
 } 
 app.use(cors(corsOptions));
