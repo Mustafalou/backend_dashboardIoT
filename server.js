@@ -86,7 +86,7 @@ app.delete('/api/users/:id', (req, res) => {
 
 // Get all projects endpoint
 app.get('/api/projects', (req, res) => {
-  res.json(projects);
+  res.status(200).json(projects);
 });
 // Create new project endpoint
 app.post('/api/projects', (req, res) => {
