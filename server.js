@@ -25,6 +25,7 @@ let users = [
     isAdmin: true // Marking admin user
   }
 ];
+let projects = [];
 
 const secretKey = 'your-secret-key';
 
@@ -81,6 +82,22 @@ app.delete('/api/users/:id', (req, res) => {
     }catch(error){
       res.status(500).send("internal error")
     }
+});
+
+// Get all projects endpoint
+app.get('/api/projects', (req, res) => {
+  res.json(projects);
+});
+// Create new project endpoint
+app.post('/api/projects', (req, res) => {
+  try {
+    const { name, description } = req.body;
+    const newProject = { id: projects.length + 1, name, description };
+    projects.push(newProject);
+    res.status(201).send({ message: 'Project created successfully', project: newProject });
+  } catch (error) {
+    res.status(500).send("Internal error");
+  }
 });
 // Start the server
 app.listen(PORT, () => {
