@@ -25,10 +25,7 @@ let users = [
     isAdmin: true // Marking admin user
   }
 ];
-let projects = [{
-  "name":"yolo",
-  "description":"it's ok this is just a test"
-}];
+let projects = [];
 
 const secretKey = 'your-secret-key';
 
