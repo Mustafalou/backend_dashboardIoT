@@ -82,7 +82,7 @@ app.post('/api/auth/login', async (req, res) => {
     if (match) {
       // Generate JWT
       const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
-      res.cookie('accesToken', token, { httpOnly: true, secure: true, sameSite: 'strict', maxAge: 3600000 });
+      res.cookie('accesToken', token, { httpOnly: true, secure: false, sameSite: 'strict', maxAge: 3600000 });
       res.send({ message: "Logged in successfully" });
     } else {
       res.status(401).send({ message: "Invalid credentials" });
