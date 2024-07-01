@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 const corsOptions = {
   origin:[
     "http://localhost:3000",
-    "http://c.technivor.net",
+    "https://c.technivor.net",
   ],
   credentials:true,
 } 
