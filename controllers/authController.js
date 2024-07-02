@@ -2,6 +2,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models/db'); // Assuming you have a User model in models directory
+const userActivityController = require('./userActivityController');
+
 const secretKey = 'your_secret_key';
 
 exports.login = async (req, res) => {
@@ -16,8 +18,10 @@ exports.login = async (req, res) => {
         // Generate JWT
         const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
         res.cookie('accessToken', token, { httpOnly: true, secure: true, sameSite: 'strict', maxAge: 3600000 });
+        await userActivityController.logActivity(user.id, 'login', `User logged in`);
         res.send({ message: "Logged in successfully" });
-      } else {
+      
+    } else {
         res.status(401).send({ message: "Invalid credentials" });
       }
     } else {
@@ -33,6 +37,7 @@ exports.logout= async (req, res) => {
     try {
         res.clearCookie('accesToken');
         res.send({ message: "Logged out successfully" });
+        await userActivityController.logActivity(req.user.userId, 'logout', `User logged out`);
     } catch (error) {
         console.error('Error during logout:', error);
         res.status(500).send({ message: "Internal server error" });
