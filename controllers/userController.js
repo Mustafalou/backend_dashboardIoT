@@ -53,11 +53,13 @@ exports.deleteUser = async (req, res) => {
   }
 };
 exports.getUserActivityLogs = async (req, res) => {
-    try {
-      const logs = await UserActivityLog.findAll();
-      res.status(200).json(logs);
-    } catch (error) {
-      console.error('Error fetching user activity logs:', error);
-      res.status(500).send({ message: 'Internal server error' });
-    }
-  };
+  try {
+    const logs = await UserActivityLog.findAll({
+      order: [['timestamp', 'DESC']]
+    });
+    res.status(200).json(logs);
+  } catch (error) {
+    console.error('Error fetching user activity logs:', error);
+    res.status(500).send({ message: 'Internal server error' });
+  }
+};
