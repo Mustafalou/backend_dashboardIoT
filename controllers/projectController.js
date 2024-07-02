@@ -15,7 +15,7 @@ exports.createProject = async (req, res) => {
   try {
     const { name, description } = req.body;
     const newProject = await Project.create({ name, description });
-    await userActivityController.logActivity(req.user.id, 'create', `Project created with name ${name}`);
+    await userActivityController.logActivity(req.user.id,req.user.email, 'create', `Project created with name ${name}`);
     res.status(201).send({ message: 'Project created successfully', project: newProject });
   } catch (error) {
     console.error('Error creating project:', error);

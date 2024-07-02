@@ -29,7 +29,7 @@ app.use('/api/users', userRoutes);
 app.use("/api/projects", projectRoutes);
 
 //Start The Server
-sequelize.sync({alter:true}).then(async () => {
+sequelize.sync({alter:true, force:false}).then(async () => {
   console.log('Database synced');
   await seedAdmin();
   app.listen(PORT, () => {

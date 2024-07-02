@@ -16,9 +16,9 @@ exports.login = async (req, res) => {
       const match = await bcrypt.compare(password, user.password);
       if (match) {
         // Generate JWT
-        const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.id, userEmail:user.email }, secretKey, { expiresIn: '1h' });
         res.cookie('accessToken', token, { httpOnly: true, secure: true, sameSite: 'strict', maxAge: 3600000 });
-        await userActivityController.logActivity(user.id, 'login', `User logged in`);
+        await userActivityController.logActivity(user.id,user.email, 'login', `User logged in`);
         res.send({ message: "Logged in successfully" });
       
     } else {
@@ -37,7 +37,7 @@ exports.logout= async (req, res) => {
     try {
         res.clearCookie('accesToken');
         res.send({ message: "Logged out successfully" });
-        await userActivityController.logActivity(req.user.userId, 'logout', `User logged out`);
+        await userActivityController.logActivity(req.user.userId,req.user.email, 'logout', `User logged out`);
     } catch (error) {
         console.error('Error during logout:', error);
         res.status(500).send({ message: "Internal server error" });

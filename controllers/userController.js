@@ -5,7 +5,7 @@ exports.createUser = async (req, res) => {
   try {
     const { email, password, isAdmin } = req.body;
     const newUser = await User.create({ email, password: password, isAdmin });
-    await userActivityController.logActivity(req.user.id, 'create', `User created with email ${email}`);
+    await userActivityController.logActivity(req.user.id,req.user.email, 'create', `User created with email ${email}`);
     res.status(201).send({ message: 'User created successfully', user: newUser });
   } catch (error) {
     console.error('Error creating user:', error);
@@ -44,7 +44,7 @@ exports.deleteUser = async (req, res) => {
         return res.status(400).send({ message: 'Cannot delete the last admin user' });
     }
     }
-    await userActivityController.logActivity(req.user.id, 'delete', `User deleted with email ${user.email}`);
+    await userActivityController.logActivity(req.user.id,req.user.email, 'delete', `User deleted with email ${user.email}`);
     await user.destroy();
     res.status(200).send({ message: 'User deleted successfully' });
   } catch (error) {
