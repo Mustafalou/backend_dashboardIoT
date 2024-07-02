@@ -1,12 +1,10 @@
-// controllers/userController.js
-const bcrypt = require('bcryptjs');
+
 const { User } = require('../models/db'); // Adjust the path to import from models/db
 
 exports.createUser = async (req, res) => {
   try {
     const { email, password, isAdmin } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ email, password: hashedPassword, isAdmin });
+    const newUser = await User.create({ email, password: password, isAdmin });
     res.status(201).send({ message: 'User created successfully', user: newUser });
   } catch (error) {
     console.error('Error creating user:', error);
