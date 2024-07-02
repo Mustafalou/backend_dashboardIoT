@@ -37,7 +37,7 @@ exports.logout= async (req, res) => {
     try {
         res.clearCookie('accesToken');
         res.send({ message: "Logged out successfully" });
-        await userActivityController.logActivity(req.user.userId,req.user.email, 'logout', `User logged out`);
+        await userActivityController.logActivity(req.user.userId,req.user.userEmail, 'logout', `User logged out`);
     } catch (error) {
         console.error('Error during logout:', error);
         res.status(500).send({ message: "Internal server error" });
