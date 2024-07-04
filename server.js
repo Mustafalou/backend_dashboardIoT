@@ -13,6 +13,9 @@ const seedAdmin = require('./seeders/seedAdmin');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const projectRoutes = require('./routes/projectRoutes');
+
+const mqttClient = require('./mqttClient');
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 const corsOptions = {

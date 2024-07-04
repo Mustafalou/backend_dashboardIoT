@@ -4,7 +4,7 @@ const path = require('path');
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize('technivoriot', 'technivor', 'bdzaa$', {
-  host: "localhost",
+  host: "192.168.1.2",
   dialect: "postgres",
 });
 
