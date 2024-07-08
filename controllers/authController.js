@@ -17,7 +17,7 @@ exports.login = async (req, res) => {
       if (match) {
         // Generate JWT
         const token = jwt.sign({ userId: user.id, userEmail:user.email }, secretKey, { expiresIn: '1h' });
-        res.cookie('accessToken', token, { httpOnly: true, secure: false, sameSite: 'strict', maxAge: 3600000 });
+        res.cookie('accessToken', token, { httpOnly: true, true: false, sameSite: 'strict', maxAge: 3600000 });
         await userActivityController.logActivity(user.id,user.email, 'login', `User logged in`);
         res.send({ message: "Logged in successfully" });
       
