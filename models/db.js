@@ -3,7 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('technivoriot', 'technivor', 'bdzaa$', {
+const sequelize = new Sequelize('technivoriot','technivor','bdzaa$', {
+  port: 5432,
   host: "192.168.1.2",
   dialect: "postgres",
 });

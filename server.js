@@ -13,7 +13,7 @@ const seedAdmin = require('./seeders/seedAdmin');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const projectRoutes = require('./routes/projectRoutes');
-
+const dataRoutes = require('./routes/dataRoutes');
 const mqttClient = require('./mqttClient');
 
 app.use(cookieParser());
@@ -30,7 +30,7 @@ app.use(cors(corsOptions));
 app.use("/api/auth",authRoutes);
 app.use('/api/users', userRoutes);
 app.use("/api/projects", projectRoutes);
-
+app.use("/api/data", dataRoutes);
 //Start The Server
 sequelize.sync({alter:true, force:false}).then(async () => {
   console.log('Database synced');
