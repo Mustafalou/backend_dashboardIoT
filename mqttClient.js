@@ -3,7 +3,7 @@ const mqtt = require('mqtt');
 const influx = require('./influxClient');
 
 const options = {
-  host: '192.168.1.2',
+  host: '192.168.1.63',
   port: 1883,
   protocol: 'mqtt',
   username: 'technivor',
@@ -34,9 +34,7 @@ client.on('message', (topic, message) => {
       fields: { value: message }, // Adjust fields as per your data structure
       timestamp: new Date() // Optional: let InfluxDB handle timestamps automatically
     }
-  ]).then(() => {
-    console.log('Data written to InfluxDB');
-  }).catch((error) => {
+  ]).catch((error) => {
     console.error(`Error writing tonfluxDB: ${error.message}`);
   })
 });
