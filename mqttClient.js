@@ -1,9 +1,10 @@
 // mqttClient.js
 const mqtt = require('mqtt');
 const influx = require('./influxClient');
+const { CheckData } = require('./controllers/dataController');
 
 const options = {
-  host: 'localhost',
+  host: '192.168.1.63',
   port: 1883,
   protocol: 'mqtt',
   username: 'technivor',
@@ -16,18 +17,22 @@ client.on('connect', () => {
   console.log('Connected to MQTT broker');
 
   // Example subscription
-  client.subscribe('test', (err) => {
+  client.subscribe('#', (err) => {
     if (!err) {
-      console.log('Subscribed to test');
+      console.log('Subscribed to #');
     } else {
       console.error('Subscription error:', err);
     }
   });
 });
 
-client.on('message', (topic, message) => {
+client.on('message',async  (topic, message) => {
+  const check = await CheckData(topic,message.toString());
+  if (check!==null){
+    client.publish("notification",check.notification)
+  }
   // Write data to InfluxDB
-  influx.writePoints([
+  /*influx.writePoints([
     {
       measurement: 'test_data',
       tags: { topic: topic },
@@ -35,12 +40,16 @@ client.on('message', (topic, message) => {
       timestamp: new Date() // Optional: let InfluxDB handle timestamps automatically
     }
   ]).catch((error) => {
-    console.error(`Error writing tonfluxDB: ${error.message}`);
-  })
+    console.error(`Error writing to InfluxDB: ${error.message}`);
+  })*/
 });
 
 client.on('error', (err) => {
   console.error('MQTT error:', err);
 });
 
-module.exports = client;
+
+
+module.exports = {
+  client,
+};
