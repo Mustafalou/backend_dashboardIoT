@@ -2,6 +2,7 @@
 const mqtt = require('mqtt');
 const influx = require('./influxClient');
 const { CheckData } = require('./controllers/dataController');
+const { logAlert } = require('./controllers/alertController');
 
 const options = {
   host: '192.168.1.63',
@@ -30,6 +31,7 @@ client.on('message',async  (topic, message) => {
   const check = await CheckData(topic,message.toString());
   if (check!==null){
     console.log("notification sent")
+    logAlert(topic,check.notification)
     client.publish("notification",check.notification)
   }
   // Write data to InfluxDB
