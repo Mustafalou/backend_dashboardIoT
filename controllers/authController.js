@@ -15,7 +15,7 @@ exports.login = async (req, res) => {
       const match = await bcrypt.compare(password, user.password);
       if (match) {
         const token = jwt.sign({ userId: user.id, userEmail:user.email }, secretKey, { expiresIn: '1h' });
-        res.cookie('accessToken', token, { httpOnly: true, secure: false, sameSite: 'strict', maxAge: 1000*60*60*12 });
+        res.cookie('accessToken', token, { httpOnly: true, secure: true, sameSite: 'strict', maxAge: 1000*60*60*12 });
         await userActivityController.logActivity(user.id,user.email, 'login', `User logged in`);
         res.send({ message: "Logged in successfully" });
       

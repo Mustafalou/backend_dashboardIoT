@@ -10,7 +10,7 @@ const options = {
   username: 'technivor',
   password: 'bdzaa$',
 };
-
+var notifications = {};
 const client = mqtt.connect(options);
 
 client.on('connect', () => {
@@ -29,6 +29,7 @@ client.on('connect', () => {
 client.on('message',async  (topic, message) => {
   const check = await CheckData(topic,message.toString());
   if (check!==null){
+    console.log("notification sent")
     client.publish("notification",check.notification)
   }
   // Write data to InfluxDB
