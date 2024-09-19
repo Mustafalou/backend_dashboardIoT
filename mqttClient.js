@@ -5,7 +5,7 @@ const { CheckData } = require('./controllers/dataController');
 const { logAlert } = require('./controllers/alertController');
 
 const options = {
-  host: '192.168.1.63',
+  host: 'localhost',
   port: 1883,
   protocol: 'mqtt',
   username: 'technivor',
