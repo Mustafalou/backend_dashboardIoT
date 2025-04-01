@@ -20,9 +20,9 @@ client.on('connect', () => {
   // Example subscription
   client.subscribe('#', (err) => {
     if (!err) {
-      console.log('Subscribed to #');
+      //console.log('Subscribed to #');
     } else {
-      console.error('Subscription error:', err);
+      //console.error('Subscription error:', err);
     }
   });
 });
@@ -30,7 +30,7 @@ client.on('connect', () => {
 client.on('message',async  (topic, message) => {
   const check = await CheckData(topic,message.toString());
   if (check!==null){
-    console.log("notification sent")
+    //console.log("notification sent")
     logAlert(topic,check.notification)
     client.publish("notification",check.notification)
   }
@@ -48,7 +48,7 @@ client.on('message',async  (topic, message) => {
 });
 
 client.on('error', (err) => {
-  console.error('MQTT error:', err);
+  //console.error('MQTT error:', err);
 });
 
 

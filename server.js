@@ -22,24 +22,24 @@ app.use(bodyParser.json());
 const corsOptions = {
   origin:[
     "http://localhost:3000",
-    "https://c.technivor.net",
+    //"https://c.technivor.net",
   ],
   credentials:true,
 } 
 app.use(cors(corsOptions));
 
 app.use("/api/auth",authRoutes);
-app.use('/api/users', userRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/data", dataRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/alerts",alertRoutes)
 //Start The Server
 sequelize.sync({alter:true, force:false}).then(async () => {
   console.log('Database synced');
   await seedAdmin();
   app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+   console.log(`Server is running on port ${PORT}`);
   });
 }).catch((error)=>{
-    console.log("unable to sync database:", error);
+   console.log("unable to sync database:", error);
 });

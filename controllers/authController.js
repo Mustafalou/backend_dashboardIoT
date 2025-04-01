@@ -15,7 +15,7 @@ exports.login = async (req, res) => {
       const match = await bcrypt.compare(password, user.password);
       if (match) {
         const token = jwt.sign({ userId: user.id, userEmail:user.email }, secretKey, { expiresIn: '1h' });
-        res.cookie('accessToken', token, { httpOnly: true, secure: true, sameSite: 'strict', maxAge: 1000*60*60*12 });
+        res.cookie('accessToken', token, { httpOnly: true, secure: false, sameSite: 'strict', maxAge: 1000*60*60*12 }); // Attention remettre en true et strict
         await userActivityController.logActivity(user.id,user.email, 'login', `User logged in`);
         res.send({ message: "Logged in successfully" });
       
@@ -33,7 +33,7 @@ exports.login = async (req, res) => {
 
 exports.logout= async (req, res) => {
     try {
-        res.clearCookie('accesToken');
+        res.clearCookie('accessToken');
         res.send({ message: "Logged out successfully" });
         await userActivityController.logActivity(req.user.userId,req.user.userEmail, 'logout', `User logged out`);
     } catch (error) {

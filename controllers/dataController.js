@@ -24,7 +24,7 @@ exports.CheckData = async (topic,value)=>{
         });
         return notification
     }catch(err){
-        console.log(err)
+        //console.log(err)
         return notification
     }
 }
